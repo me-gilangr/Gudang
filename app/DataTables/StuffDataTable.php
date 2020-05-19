@@ -2,14 +2,14 @@
 
 namespace App\DataTables;
 
-use App\User;
+use App\Stuff;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class UsersDataTable extends DataTable
+class StuffDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -24,14 +24,14 @@ class UsersDataTable extends DataTable
             ->addColumn('action', function($data) {
                 $btn = '
                 <div class="btn-group"> 
-                    <a href="'.route('User.show', $data->id).'" class="btn btn-outline-info btn-sm flat mr-1">
+                    <a href="'.route('Stuff.show', $data->id).'" class="btn btn-outline-info btn-sm flat mr-1">
                         <i class="fa fa-user"></i>
                     </a>
-                    <a href="'.route('User.edit', $data->id).'" class="btn btn-outline-warning btn-sm flat">
+                    <a href="'.route('Stuff.edit', $data->id).'" class="btn btn-outline-warning btn-sm flat">
                         <i class="fa fa-edit"></i>
                     </a>    
                     
-                    <form action="'.route('User.destroy', $data->id).'" method="post">
+                    <form action="'.route('Stuff.destroy', $data->id).'" method="post">
                         '.csrf_field().'
                         '.method_field('delete').'
                         <button type="submit" class="btn btn-outline-danger btn-sm flat ml-1">
@@ -41,19 +41,16 @@ class UsersDataTable extends DataTable
                 </div>
                 ';
                 return $btn;
-            })
-            ->addColumn('level', function($data) {
-                return $data->roles->first()->name;
             });
     }
 
     /**
      * Get query source of dataTable.
      *
-     * @param \App\User $model
+     * @param \App\Stuff $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(User $model)
+    public function query(Stuff $model)
     {
         return $model->newQuery();
     }
@@ -67,11 +64,11 @@ class UsersDataTable extends DataTable
     {
         $dom = "<'row'<'col-md-4 col-lg-4'l><'col-md-8 col-lg-8'f>>rtip";
         return $this->builder()
-            ->setTableId('users-table')
+            ->setTableId('stuff-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->dom($dom)
-            ->orderBy(1)
+            ->orderBy(0, 'asc')
             ->addTableClass('table')
             ->autoWidth(true)
             ->lengthMenu([10, 25, 50], [10, 25, 50]);
@@ -87,10 +84,6 @@ class UsersDataTable extends DataTable
         return [
             Column::make('id'),
             Column::make('name'),
-            Column::make('gender'),
-            Column::make('level'),
-            Column::make('created_at'),
-            Column::make('updated_at'), 
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
@@ -106,6 +99,6 @@ class UsersDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'Users_' . date('YmdHis');
+        return 'Stuff_' . date('YmdHis');
     }
 }

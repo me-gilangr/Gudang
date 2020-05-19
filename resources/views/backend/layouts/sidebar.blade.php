@@ -29,8 +29,8 @@
         <li class="nav-header">
           Menu Utama
         </li>
-        <li class="nav-item has-treeview {{ Request::is('Administrator/Category*') ? 'menu-open':'' }}">
-          <a href="#" class="nav-link {{ Request::is('Administrator/Category*') ? 'active':'' }}">
+        <li class="nav-item has-treeview {{ Request::is('Administrator/Category*') || Request::is('Administrator/Storage*') || Request::is('Administrator/Stuff*') ? 'menu-open':'' }}">
+          <a href="#" class="nav-link {{ Request::is('Administrator/Category*') || Request::is('Administrator/Storage*') || Request::is('Administrator/Stuff*') ? 'active':'' }}">
             <i class="nav-icon fa fa-table"></i>
             <p>
               Master Data
@@ -43,13 +43,19 @@
                 <i class="fa fa-caret-right nav-icon"></i>
                 <p>Data Kategori</p>
               </a>
-            </li>
+            </li> 
             <li class="nav-item">
-              <a href="#" class="nav-link">
+              <a href="{{ route('Storage.index') }} " class="nav-link">
                 <i class="fa fa-caret-right nav-icon"></i>
-                <p>Inactive Page</p>
+                <p>Data Gudang</p>
               </a>
-            </li>
+            </li> 
+            <li class="nav-item">
+              <a href="{{ route('Stuff.index') }} " class="nav-link">
+                <i class="fa fa-caret-right nav-icon"></i>
+                <p>Data Barang</p>
+              </a>
+            </li> 
           </ul>
         </li>
         <li class="nav-item">

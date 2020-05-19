@@ -11,7 +11,8 @@ class CategoryController extends Controller
 {
     public function index(CategoryDataTable $dataTable)
     {
-        return $dataTable->render('backend.category.index');
+        $trashed = Category::onlyTrashed()->get();
+        return $dataTable->render('backend.category.index', ['trashed' => $trashed]);
     }
 
     public function store(Request $request)
@@ -42,7 +43,7 @@ class CategoryController extends Controller
             $category->delete();
 
             return response()->json([
-                'success' => 'Data Berhasil di-Tambahkan !',
+                'success' => 'Data Di-Hapus !',
                 'status' => 200,
             ], 200);
         } catch (\Exception $e) {

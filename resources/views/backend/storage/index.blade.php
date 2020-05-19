@@ -14,11 +14,8 @@
 <div class="col-12">
   <div class="card card-primary card-outline">
     <div class="card-header">
-      <h5 class="card-title m-0"> <i class="fa fa-cog"></i> &ensp; Data Kategori</h5>
+      <h5 class="card-title m-0"> <i class="fa fa-archive"></i> &ensp; Data Gudang</h5>
       <div class="card-tools">
-        <button type="button" class="btn btn-tool" id="trashed">
-          <i class="fa fa-trash"></i>
-        </button>
         <button type="button" class="btn btn-tool" data-card-widget="collapse">
           <i class="fas fa-minus"></i>
         </button> 
@@ -29,7 +26,7 @@
     </div>
     <div class="card-body"> 
       <div class="table-responsive"> 
-        <table class="table table-bordered table-hover table-striped" id="category-table">
+        <table class="table table-bordered table-hover table-striped" id="storage-table">
 
         </table>
       </div>
@@ -37,56 +34,26 @@
   </div>
 </div>
 
-<div class="modal fade" id="trashed-modal">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Tempat Sampah Data Kategori</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="table-responsive">
-          <table class="table table-bordered table-hover table-striped" id="trashed-table" style="width: 100%;">
-            <thead>
-              <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Detail</th>
-                <th>Tanggal Hapus</th>
-                <th class="text-center">Action</th>
-              </tr>
-            </thead>
-          </table>
-        </div>
-      </div>
-      <div class="modal-footer justify-content-between">
-        <button type="reset" class="btn btn-default" data-dismiss="modal">Tutup</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 <form action="#" method="post" id="add-form">
   <div class="modal fade" id="create-modal">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title">Form Tambah Data Kategori</h4>
+          <h4 class="modal-title">Form Tambah Data Gudang</h4>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
             <div class="form-group">
-              <label for="">Nama Kategori : <span class="text-danger">*</span></label>
-              <input type="text" name="name" id="add-name" class="form-control" placeholder="Masukan Nama Kategori..." required>
+              <label for="">Nama Gudang : <span class="text-danger">*</span></label>
+              <input type="text" name="name" id="add-name" class="form-control" placeholder="Masukan Nama Gudang..." required>
               <span class="text-danger" id="add-name-error"></span>
             </div>
             <div class="form-group">
-              <label for="">Detail Kategori :</label>
-              <textarea name="detail" id="add-detail" class="form-control" placeholder="Masukan Detail Kategori..."></textarea>
+              <label for="">Detail Gudang :</label>
+              <textarea name="detail" id="add-detail" class="form-control" placeholder="Masukan Detail Gudang..."></textarea>
               <span class="text-danger" id="add-detail-error"></span>
             </div> 
         </div>
@@ -104,7 +71,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title">Form Edit Data Kategori</h4>
+          <h4 class="modal-title">Form Edit Data Gudang</h4>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -112,13 +79,13 @@
         <div class="modal-body">
             <input type="hidden" id="edit-id" required>
             <div class="form-group">
-              <label for="">Nama Kategori : <span class="text-danger">*</span></label>
-              <input type="text" name="name" id="edit-name" class="form-control" placeholder="Masukan Nama Kategori..." required>
+              <label for="">Nama Gudang : <span class="text-danger">*</span></label>
+              <input type="text" name="name" id="edit-name" class="form-control" placeholder="Masukan Nama Gudang..." required>
               <span class="text-danger" id="edit-name-error"></span>
             </div>
             <div class="form-group">
-              <label for="">Detail Kategori :</label>
-              <textarea name="detail" id="edit-detail" class="form-control" placeholder="Masukan Detail Kategori..."></textarea>
+              <label for="">Detail Gudang :</label>
+              <textarea name="detail" id="edit-detail" class="form-control" placeholder="Masukan Detail Gudang..."></textarea>
               <span class="text-danger" id="edit-detail-error"></span>
             </div> 
         </div>
@@ -136,23 +103,6 @@
 {{ $dataTable->scripts() }}
 <script>
   $(document).ready(function() {
-    $('#trashed-table').DataTable({
-      ordering: false,
-      processing: true,
-      serverSide: true,
-      ajax: "{{ route('json.trashed.category') }}",
-      columnDefs: [
-        {className: "text-center", "targets": [3]},
-        {className: "text-center", "targets": [4]},
-      ],
-      columns: [
-        {data: 'id', searchable: false},
-        {data: 'name', searchable: true},
-        {data: 'detail', searchable: true},
-        {data: 'deleted_at', searchable: true},
-        {data: 'action', searchable: false, orderable: false}
-      ]
-    });
 
     $('#add-data').on('click', function() {
       $('#create-modal').modal('show');
@@ -165,7 +115,7 @@
       var detail = $('#add-detail').val();
       
       $.ajax({
-        url: "{{ route('Category.store') }}",
+        url: "{{ route('Storage.store') }}",
         method: 'POST',
         data: {
           _token:"{{ csrf_token() }}",
@@ -174,7 +124,7 @@
         },
         success: function(res) {
           $('#create-modal').modal('hide');
-          $('#category-table').DataTable().ajax.reload();
+          $('#storage-table').DataTable().ajax.reload();
           if (res.status == '200') {
             toastSuccess('Data Berhasil di-Tambahkan !');
           }
@@ -198,10 +148,10 @@
       });
     });
 
-    $('#category-table').on('click', '#data-delete', function() {
+    $('#storage-table').on('click', '#data-delete', function() {
       var id = $(this).data('id');
       $.ajax({
-        url: "Category/"+id,
+        url: "Storage/"+id,
         method: "POST",
         data: {
           _token: "{{ csrf_token() }}",
@@ -209,8 +159,7 @@
           id: id,
         },
         success: function(res) {
-          $('#category-table').DataTable().ajax.reload();
-          $('#trashed-table').DataTable().ajax.reload();
+          $('#storage-table').DataTable().ajax.reload();
           if (res.status == '200') {
             toastWarning(res.success);
           }
@@ -223,10 +172,10 @@
       })
     });
 
-    $('#category-table').on('click', '#data-edit', function() {
+    $('#storage-table').on('click', '#data-edit', function() {
       var id = $(this).data('id');
       $.ajax({
-        url: "Category/"+id+"/edit",
+        url: "Storage/"+id+"/edit",
         method: "GET",
         success: function(res) {
           $('#edit-modal').modal('show');
@@ -249,7 +198,7 @@
       var detail = $('#edit-detail').val();
       
       $.ajax({
-        url: "Category/"+id,
+        url: "Storage/"+id,
         method: "POST",
         data: {
           _token: "{{ csrf_token() }}",
@@ -260,7 +209,7 @@
         },
         success: function(res) {
           $('#edit-modal').modal('hide');
-          $('#category-table').DataTable().ajax.reload();
+          $('#storage-table').DataTable().ajax.reload();
           if (res.status == '200') {
             toastInfo(res.success);
           }
@@ -297,12 +246,6 @@
       $('#edit-detail').val('').removeClass('is-invalid');
       $('#edit-name-error').text('');
       $('#edit-detail-error').text('');
-    });
-
-    $('#trashed').on('click', function() {
-      $('#trashed-modal').modal('show');
-
-      
     });
   });
 </script>

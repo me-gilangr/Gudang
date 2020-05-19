@@ -22,6 +22,15 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('/', 'Backend\MainController@index')->name('admin.main');
             Route::resource('User', 'Backend\UserController');
             Route::resource('Category', 'Backend\CategoryController');
+            Route::resource('Storage', 'Backend\StorageController');
+            Route::resource('Stuff', 'Backend\StuffController');    
         });
+    });
+
+    Route::group(['prefix' => 'json'], function () {
+        Route::get('storage', 'JsonController@storage')->name('json.storage');
+        Route::get('storage/trashed', 'JsonController@trashedStorage')->name('json.trashed.storage');
+        Route::get('category', 'JsonController@category')->name('json.category');
+        Route::get('category/trashed', 'JsonController@trashedCategory')->name('json.trashed.category');
     });
 });
