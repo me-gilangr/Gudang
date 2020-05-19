@@ -133,4 +133,41 @@ class StorageController extends Controller
             return response()->json($e, 400);
         }
     }
+
+    
+    public function restore(Request $request)
+    {
+        $this->validate($request, [
+            'restore_id' => 'required|numeric',
+        ]);
+
+        try {
+            $storage = Storage::onlyTrashed()->where('id', '=', $request->restore_id)->firstOrFail();
+            $storage->restore();
+            return response()->json([
+                'message' => 'Data Berhasil di-Pulihkan !',
+                'status' => 200,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json($e, 400);
+        }
+    }
+
+    public function permanent(Request $request)
+    {
+        $this->validate($request, [
+            'permanent_id' => 'required|numeric',
+        ]);
+        try {
+            $storage = Storage::onlyTrashed()->where('id', '=', $request->permanent_id)->firstOrFail();
+            $storage->forceDelete();
+
+            return response()->json([
+                'message' => 'Data di-Hapus Permanen !',
+                'status' => 200,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json($e, 400);
+        }
+    }
 }

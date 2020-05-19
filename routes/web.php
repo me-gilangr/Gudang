@@ -25,6 +25,16 @@ Route::group(['middleware' => ['auth']], function () {
             Route::resource('Storage', 'Backend\StorageController');
             Route::resource('Stuff', 'Backend\StuffController');    
         });
+
+        Route::group(['prefix' => 'Restore'], function () {
+            Route::post('Category', 'Backend\CategoryController@restore')->name('Category.restore');
+            Route::post('Storage', 'Backend\StorageController@restore')->name('Storage.restore');
+        });
+
+        Route::group(['prefix' => 'Perma-Del'], function () {
+            Route::post('Category', 'Backend\CategoryController@permanent')->name('Category.permanent');
+            Route::post('Storage', 'Backend\StorageController@permanent')->name('Storage.permanent');
+        });
     });
 
     Route::group(['prefix' => 'json'], function () {

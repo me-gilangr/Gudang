@@ -28,7 +28,7 @@ class CategoryController extends Controller
                 'detail' => $request->detail
             ]);
             return response()->json([
-                'success' => 'Data Berhasil di-Tambahkan !',
+                'message' => 'Data Berhasil di-Tambahkan !',
                 'status' => 200,
             ], 200);
         } catch (\Exception $e) {
@@ -43,7 +43,7 @@ class CategoryController extends Controller
             $category->delete();
 
             return response()->json([
-                'success' => 'Data Di-Hapus !',
+                'message' => 'Data Di-Hapus !',
                 'status' => 200,
             ], 200);
         } catch (\Exception $e) {
@@ -76,11 +76,47 @@ class CategoryController extends Controller
             ]);
 
             return response()->json([
-                'success' => 'Data Berhasil di-Ubah !',
+                'message' => 'Data Berhasil di-Ubah !',
                 'status' => 200,
             ], 200);
         } catch (\Exception $e) {
             return response()->json($e, 200);
+        }
+    }
+    
+    public function restore(Request $request)
+    {
+        $this->validate($request, [
+            'restore_id' => 'required|numeric',
+        ]);
+
+        try {
+            $category = Category::onlyTrashed()->where('id', '=', $request->restore_id)->firstOrFail();
+            $category->restore();
+            return response()->json([
+                'message' => 'Data Berhasil di-Pulihkan !',
+                'status' => 200,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json($e, 400);
+        }
+    }
+
+    public function permanent(Request $request)
+    {
+        $this->validate($request, [
+            'permanent_id' => 'required|numeric',
+        ]);
+        try {
+            $category = Category::onlyTrashed()->where('id', '=', $request->permanent_id)->firstOrFail();
+            $category->forceDelete();
+
+            return response()->json([
+                'message' => 'Data di-Hapus Permanen !',
+                'status' => 200,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json($e, 400);
         }
     }
 }

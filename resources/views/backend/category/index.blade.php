@@ -176,7 +176,7 @@
           $('#create-modal').modal('hide');
           $('#category-table').DataTable().ajax.reload();
           if (res.status == '200') {
-            toastSuccess('Data Berhasil di-Tambahkan !');
+            toastSuccess(res.message);
           }
         },
         error: function(e) {
@@ -212,13 +212,11 @@
           $('#category-table').DataTable().ajax.reload();
           $('#trashed-table').DataTable().ajax.reload();
           if (res.status == '200') {
-            toastWarning(res.success);
+            toastWarning(res.message);
           }
-          console.log(res);
         },
         error: function(e) {
           toastError('Terjadi Kesalahan !');
-          console.log(e);
         }
       })
     });
@@ -262,7 +260,7 @@
           $('#edit-modal').modal('hide');
           $('#category-table').DataTable().ajax.reload();
           if (res.status == '200') {
-            toastInfo(res.success);
+            toastInfo(res.message);
           }
         },
         error: function(e) {
@@ -301,9 +299,51 @@
 
     $('#trashed').on('click', function() {
       $('#trashed-modal').modal('show');
-
-      
     });
+
+    $('#trashed-table').on('click', '#data-restore', function() {
+      var id = $(this).data('id');
+      $.ajax({
+        url: "{{ route('Category.restore') }}",
+        method: "POST",
+        data: {
+          _token: "{{ csrf_token() }}",
+          restore_id:id,
+        },
+        success: function (res) {
+          $('#category-table').DataTable().ajax.reload();
+          $('#trashed-table').DataTable().ajax.reload();
+          toastSuccess(res.message);
+        },
+        error: function (e) {
+          toastError('Terjadi Kesalahan, Silahkan Refresh Ulang Halaman !');
+        }
+      })
+    });
+
+    $('#trashed-table').on('click', '#data-permanent', function() {
+      var con = confirm('Peringatan !! \nData Akan Di-Hapus Secara Permanen ! \nDan Tidak Dapat Di-Pulihkan. \nLakukan Penghapusan Data ?');
+      if (con == true) {
+        var id = $(this).data('id');
+        $.ajax({
+          url: "{{ route('Category.permanent') }}",
+          method: "POST",
+          data: {
+            _token: "{{ csrf_token() }}",
+            permanent_id:id,
+          },
+          success: function (res) {
+            $('#category-table').DataTable().ajax.reload();
+            $('#trashed-table').DataTable().ajax.reload();
+            toastWarning(res.message);
+          },
+          error: function (e) {
+            toastError('Terjadi Kesalahan, Silahkan Refresh Ulang Halaman !');
+          }
+        })
+      }
+    });
+    
   });
 </script>
 @endsection
