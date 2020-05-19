@@ -56,12 +56,18 @@
             <label for="">Kategori Barang : <span class="text-danger">*</span></label>
             <select name="category_id" id="category_id" class="form-control select2" style="width: 100%;" data-placeholder="Pilih Kategori Barang" required>
               <option value=""></option>
+              @foreach ($category as $item)
+                <option value="{{ $item->id }}">{{ $item->name }}</option>
+              @endforeach
             </select>
           </div>
           <div class="form-group col-md-3 col-lg-3">
             <label for="">Gudang Penyimpanan : <span class="text-danger">*</span></label>
             <select name="storage_id" id="storage_id" class="form-control select2" style="width: 100%;" data-placeholder="Pilih Lokasi Gudang" required>
               <option value=""></option>
+              @foreach ($storage as $item)
+                <option value="{{ $item->id }}">{{ $item->name }}</option>
+              @endforeach
             </select>
           </div>
           <div class="form-group col-12">
@@ -95,14 +101,32 @@
 @section('script')
   <script src="{{ asset('backend') }}/plugins/select2/js/select2.full.min.js"></script>
   <script>
-    $(document).ready(function() {
-      $('.select2').select2();
+    $(document).ready(function() {      
+      $('.select2').select2().on('select2:open', () => {
+        $(".select2-results:not(:has(button))").append(`
+        <button class="btn btn-outline-secondary btn-block flat" style="border-bottom-left-radius: 1px !important; border-bottom-right-radius: 1px !important;">
+          Buat Data Baru
+        </button>
+        `
+        );
+      });
+
+      $('#storage_id').select2().on('select2:open', () => {
+        $(".select2-results:not(:has(button))").append(`
+        <button class="btn btn-outline-secondary btn-block flat" style="border-bottom-left-radius: 1px !important; border-bottom-right-radius: 1px !important;">
+          Buat Data Baru
+        </button>
+        `
+        );
+      });
 
       function getCategory() {
         $.ajax({
           url: "{{ route('json.category') }}",
           method: "GET",
           success: function (res) {
+            $('#category_id').empty();
+            $('#category_id').append('<option value=""></option>')
             res.forEach(data => {
               $('#category_id').append('<option value="'+data.id+'">'+data.name+'</option>')
             });
@@ -118,6 +142,8 @@
           url: "{{ route('json.storage') }}",
           method: "GET",
           success: function (res) {
+            $('#storage_id').empty();
+            $('#storage_id').append('<option value=""></option>')
             res.forEach(data => {
               $('#storage_id').append('<option value="'+data.id+'">'+data.name+'</option>')
             });
@@ -127,9 +153,6 @@
           }
         })
       }
-
-      getCategory();
-      getStorage();
     });
   </script>
 @endsection

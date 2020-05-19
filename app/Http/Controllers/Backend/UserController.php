@@ -209,7 +209,42 @@ class UserController extends Controller
     {
         try {
             $user = User::findOrFail($id);
-            $user->delete();
+            $user->delete(); 
+
+            session()->flash('warning', 'Data Berhasil di-Hapus !');
+            return redirect(route('User.index'));
+        } catch (\Exception $e) {
+            session()->flash('error', 'Terjadi Kesalahan !');
+            return redirect()->back();
+        }
+    }
+
+    public function restore(Request $request)
+    {
+        $this->validate($request, [
+            'restore_id' => 'required|numeric',
+        ]);
+
+        try {
+            $user = User::onlyTrashed()->where('id', '=', $request->restore_id)->firstOrFail();
+            $user->restore();
+            return response()->json([
+                'message' => 'Data Berhasil di-Pulihkan !',
+                'status' => 200,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json($e, 400);
+        }
+    }
+
+    public function permanent(Request $request)
+    {
+        $this->validate($request, [
+            'permanent_id' => 'required|numeric',
+        ]);
+        try {
+            $user = User::onlyTrashed()->where('id', '=', $request->permanent_id)->firstOrFail();
+            $user->forceDelete();
             if ($user->photo != null) {
                 $path = 'images/users/'.$user->photo;
                 if (File::exists($path)) {
@@ -217,11 +252,12 @@ class UserController extends Controller
                 }
             }
 
-            session()->flash('warning', 'Data Berhasil di-Hapus !');
-            return redirect(route('User.index'));
+            return response()->json([
+                'message' => 'Data di-Hapus Permanen !',
+                'status' => 200,
+            ], 200);
         } catch (\Exception $e) {
-            session()->flash('error', 'Terjadi Kesalahan !');
-            return redirect()->back();
+            return response()->json($e, 400);
         }
     }
 }

@@ -133,7 +133,6 @@ class StorageController extends Controller
             return response()->json($e, 400);
         }
     }
-
     
     public function restore(Request $request)
     {

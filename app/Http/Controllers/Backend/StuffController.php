@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Category;
 use App\DataTables\StuffDataTable;
 use App\Http\Controllers\Controller;
 use App\Stuff;
@@ -26,7 +27,9 @@ class StuffController extends Controller
      */
     public function create()
     {
-        return view('backend.stuff.create');
+        $category = Category::orderBy('name', 'ASC')->get();
+        $storage = Category::orderBy('name', 'ASC')->get();
+        return view('backend.stuff.create', compact('category', 'storage'));
     }
 
     /**

@@ -25,6 +25,7 @@ class CreateUsersTable extends Migration
             $table->text('address');
             $table->string('photo', 100)->nullable();
             $table->rememberToken();
+            $table->softDeletes();
             $table->timestamps(); 
         });
     }

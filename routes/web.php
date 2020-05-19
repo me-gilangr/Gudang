@@ -27,17 +27,20 @@ Route::group(['middleware' => ['auth']], function () {
         });
 
         Route::group(['prefix' => 'Restore'], function () {
+            Route::post('User', 'Backend\UserController@restore')->name('User.restore');
             Route::post('Category', 'Backend\CategoryController@restore')->name('Category.restore');
             Route::post('Storage', 'Backend\StorageController@restore')->name('Storage.restore');
         });
 
         Route::group(['prefix' => 'Perma-Del'], function () {
+            Route::post('User', 'Backend\UserController@permanent')->name('User.permanent');
             Route::post('Category', 'Backend\CategoryController@permanent')->name('Category.permanent');
             Route::post('Storage', 'Backend\StorageController@permanent')->name('Storage.permanent');
         });
     });
 
     Route::group(['prefix' => 'json'], function () {
+        Route::get('user/trashed', 'JsonController@trashedUser')->name('json.trashed.user');
         Route::get('storage', 'JsonController@storage')->name('json.storage');
         Route::get('storage/trashed', 'JsonController@trashedStorage')->name('json.trashed.storage');
         Route::get('category', 'JsonController@category')->name('json.category');
