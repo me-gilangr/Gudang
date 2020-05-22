@@ -3,14 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Category extends Model
+class StockCard extends Model
 {
-    use SoftDeletes;
-
     protected $fillable = [
-        'name', 'detail'
+        'stuff_id', 'stock_date', 'cap_stock', 'stock_entry', 'stock_out', 'stock_back_in', 'stock_back_out', 'stock_adjustment'
     ];
 
     public function stuff()

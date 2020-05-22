@@ -82,7 +82,7 @@ class UserController extends Controller
         } catch (\Exception $e) {
             dd($e);
             session()->flash('error', 'Terjadi Kesalahan !');
-            return redirect()->back();
+            return redirect()->back()->withInput($request->all());
         }
     }
 
@@ -195,7 +195,7 @@ class UserController extends Controller
         } catch (\Exception $e) {
             dd($e);
             session()->flash('error', 'Terjadi Kesalahan !');
-            return redirect()->back();
+            return redirect()->back()->withInput($request->all());
         }
     }
 

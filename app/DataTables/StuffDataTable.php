@@ -21,11 +21,20 @@ class StuffDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
+            ->addColumn('nama', function($data) {
+                return $data->name;
+            })
+            ->addColumn('kategori', function($data) { 
+                return $data->category->name;
+            })
+            ->addColumn('lokasi barang', function($data) {
+                return $data->storage->name;
+            })
             ->addColumn('action', function($data) {
                 $btn = '
                 <div class="btn-group"> 
                     <a href="'.route('Stuff.show', $data->id).'" class="btn btn-outline-info btn-sm flat mr-1">
-                        <i class="fa fa-user"></i>
+                        <i class="fa fa-info"></i>
                     </a>
                     <a href="'.route('Stuff.edit', $data->id).'" class="btn btn-outline-warning btn-sm flat">
                         <i class="fa fa-edit"></i>
@@ -83,7 +92,9 @@ class StuffDataTable extends DataTable
     {
         return [
             Column::make('id'),
-            Column::make('name'),
+            Column::make('nama'),
+            Column::make('kategori'),
+            Column::make('lokasi barang'),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)

@@ -12,4 +12,9 @@ class Storage extends Model
     protected $fillable = [
         'name', 'detail'
     ];
+
+    public function stuff()
+    {
+        return $this->belongsTo('App\Stuff');
+    }
 }

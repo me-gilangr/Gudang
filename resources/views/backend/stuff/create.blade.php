@@ -47,32 +47,52 @@
         <div class="row">
           <div class="form-group col-md-6 col-lg-6">
             <label for="">Nama Barang : <span class="text-danger">*</span></label>
-            <input type="text" name="name" id="name" class="form-control {{ $errors->has('name') ? 'is-invalid':'' }}" placeholder="Masukan Nama Barang..." required autofocus>
+            <input type="text" name="name" id="name" class="form-control {{ $errors->has('name') ? 'is-invalid':'' }}" placeholder="Masukan Nama Barang..." value="{{ old('name') }}" required autofocus>
             <span class="text-danger">
               {{ $errors->first('name') }}
             </span>
           </div>
-          <div class="form-group col-md-3 col-lg-3">
+          <div class="form-group col-md-3 col-lg-3 {{ $errors->has('category_id') ? 'is-invalid':'' }}">
             <label for="">Kategori Barang : <span class="text-danger">*</span></label>
             <select name="category_id" id="category_id" class="form-control select2" style="width: 100%;" data-placeholder="Pilih Kategori Barang" required>
               <option value=""></option>
               @foreach ($category as $item)
-                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                <option value="{{ $item->id }}" {{ $item->id == old('category_id') ? 'selected':'' }}>{{ $item->name }}</option>
               @endforeach
+              <span class="text-danger">
+                {{ $errors->first('category_id') }}
+              </span>
             </select>
           </div>
-          <div class="form-group col-md-3 col-lg-3">
+          <div class="form-group col-md-3 col-lg-3  {{ $errors->has('storage_id') ? 'is-invalid':'' }}">
             <label for="">Gudang Penyimpanan : <span class="text-danger">*</span></label>
             <select name="storage_id" id="storage_id" class="form-control select2" style="width: 100%;" data-placeholder="Pilih Lokasi Gudang" required>
               <option value=""></option>
               @foreach ($storage as $item)
-                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                <option value="{{ $item->id }}" {{ $item->id == old('storage_id') ? 'selected':'' }}>{{ $item->name }}</option>
               @endforeach
             </select>
+            <span class="text-danger">
+              {{ $errors->first('storage_id') }}
+            </span>
           </div>
           <div class="form-group col-12">
             <label for="">Deskripsi Barang : <span class="text-danger">*</span></label>
-            <textarea name="description" id="description" class="form-control {{ $errors->has('description') ? 'is-invalid':'' }}" placeholder="Masukan Deskripsi Barang..." required></textarea>
+            <textarea name="description" id="description" class="form-control {{ $errors->has('description') ? 'is-invalid':'' }}" placeholder="Masukan Deskripsi Barang..." required>{{ old('description') }}</textarea>
+          </div> 
+          <div class="form-group col-md-6 col-lg-6">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Stok Modal &ensp; : </span>
+              </div>
+              <input type="number" name="cap_stock" id="cap_stock" class="form-control {{ $errors->has('cap_stock') ? 'is-invalid':'' }}" placeholder="0" min="1" value="{{ old('cap_stock') }}">
+              <div class="input-group-append">
+                <span class="input-group-text">* Dapat di-Kosongkan</span>
+              </div>
+            </div>
+            <span class="text-danger">
+              {{ $errors->first('cap_stock') }}
+            </span>
           </div>
           <div class="form-group col-12">
             <hr class="mt-0 mb-2">
@@ -96,16 +116,79 @@
     </div>
   </div>
 </div>
+
+<form action="#" method="post" id="category-add-form">
+  <div class="modal fade" id="category-create-modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Form Tambah Data Kategori</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="">Nama Kategori : <span class="text-danger">*</span></label>
+            <input type="text" name="name" id="category-add-name" class="form-control" placeholder="Masukan Nama Kategori..." required>
+            <span class="text-danger" id="category-add-name-error"></span>
+          </div>
+          <div class="form-group">
+            <label for="">Detail Kategori :</label>
+            <textarea name="detail" id="category-add-detail" class="form-control" placeholder="Masukan Detail Kategori..."></textarea>
+            <span class="text-danger" id="category-add-detail-error"></span>
+          </div> 
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="reset" class="btn btn-default" data-dismiss="modal">Batalkan</button>
+          <button type="submit" class="btn btn-success">Tambah Data</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+
+<form action="#" method="post" id="storage-add-form">
+  <div class="modal fade" id="storage-create-modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Form Tambah Data Gudang</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+              <label for="">Nama Gudang : <span class="text-danger">*</span></label>
+              <input type="text" name="name" id="storage-add-name" class="form-control" placeholder="Masukan Nama Gudang..." required>
+              <span class="text-danger" id="storage-add-name-error"></span>
+            </div>
+            <div class="form-group">
+              <label for="">Detail Gudang :</label>
+              <textarea name="detail" id="storage-add-detail" class="form-control" placeholder="Masukan Detail Gudang..."></textarea>
+              <span class="text-danger" id="storage-add-detail-error"></span>
+            </div> 
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="reset" class="btn btn-default" data-dismiss="modal">Batalkan</button>
+          <button type="submit" class="btn btn-success">Tambah Data</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
 @endsection
 
 @section('script')
   <script src="{{ asset('backend') }}/plugins/select2/js/select2.full.min.js"></script>
   <script>
     $(document).ready(function() {      
-      $('.select2').select2().on('select2:open', () => {
+      $('#category_id').select2().on('select2:open', () => {
         $(".select2-results:not(:has(button))").append(`
-        <button class="btn btn-outline-secondary btn-block flat" style="border-bottom-left-radius: 1px !important; border-bottom-right-radius: 1px !important;">
-          Buat Data Baru
+        <button class="btn btn-outline-secondary btn-block flat" data-toggle="modal" data-target="#category-create-modal" onclick="$('#category_id').select2('close'); $('#storage_id').select2('close');" style="border-bottom-left-radius: 1px !important; border-bottom-right-radius: 1px !important;">
+          <i class="fa fa-plus"></i> &ensp; Buat Data Baru
         </button>
         `
         );
@@ -113,8 +196,8 @@
 
       $('#storage_id').select2().on('select2:open', () => {
         $(".select2-results:not(:has(button))").append(`
-        <button class="btn btn-outline-secondary btn-block flat" style="border-bottom-left-radius: 1px !important; border-bottom-right-radius: 1px !important;">
-          Buat Data Baru
+        <button class="btn btn-outline-secondary btn-block flat" data-toggle="modal" data-target="#storage-create-modal" onclick="$('#category_id').select2('close'); $('#storage_id').select2('close');" style="border-bottom-left-radius: 1px !important; border-bottom-right-radius: 1px !important;">
+          <i class="fa fa-plus"></i> &ensp; Buat Data Baru
         </button>
         `
         );
@@ -153,6 +236,99 @@
           }
         })
       }
+
+      $('#storage-add-form').on('submit', function(e) {
+        e.preventDefault(0);
+        var name = $('#storage-add-name').val();
+        var detail = $('#storage-add-detail').val();
+        
+        $.ajax({
+          url: "{{ route('Storage.store') }}",
+          method: 'POST',
+          data: {
+            _token:"{{ csrf_token() }}",
+            name: name,
+            detail: detail
+          },
+          success: function(res) {
+            $('#storage-create-modal').modal('hide');
+            if (res.status == '200') {
+              getStorage();
+              toastSuccess('Data Berhasil di-Tambahkan !');
+            }
+          },
+          error: function(e) {
+            if (e.status == '422') {
+              var errors = $.parseJSON(e.responseText);
+              $.each(errors, function (key, value) {
+              $('#response').addClass("alert alert-danger");
+                if($.isPlainObject(value)) {
+                  $.each(value, function (key, value) {                       
+                    $('#'+key).addClass('is-invalid');
+                    $('#add-' + key + '-error').text(value);
+                  });
+                }
+              });
+            } else {
+              toastError('Terjadi Kesalahan !');
+            }
+          } 
+        });
+      });
+
+      $('#category-add-form').on('submit', function(e) {
+        e.preventDefault(0);
+        var name = $('#category-add-name').val();
+        var detail = $('#category-add-detail').val();
+        
+        $.ajax({
+          url: "{{ route('Category.store') }}",
+          method: 'POST',
+          data: {
+            _token:"{{ csrf_token() }}",
+            name: name,
+            detail: detail
+          },
+          success: function(res) {
+            $('#category-create-modal').modal('hide');
+            if (res.status == '200') {
+              getCategory();
+              toastSuccess(res.message);
+            }
+          },
+          error: function(e) {
+            if (e.status == '422') {
+              var errors = $.parseJSON(e.responseText);
+              $.each(errors, function (key, value) {
+              $('#response').addClass("alert alert-danger");
+                if($.isPlainObject(value)) {
+                  $.each(value, function (key, value) {                       
+                    $('#'+key).addClass('is-invalid');
+                    $('#add-' + key + '-error').text(value);
+                  });
+                }
+              });
+            } else {
+              toastError('Terjadi Kesalahan !');
+            }
+          } 
+        });
+      });
+
+      $('#category-create-modal').on('hidden.bs.modal', function () {
+        $('#category-add-name').val('').removeClass('is-invalid');
+        $('#category-add-detail').val('').removeClass('is-invalid');
+        $('#category-add-name-error').text('');
+        $('#category-add-detail-error').text('');
+      });
+
+      $('#storage-create-modal').on('hidden.bs.modal', function () {
+        $('#storage-add-name').val('').removeClass('is-invalid');
+        $('#storage-add-detail').val('').removeClass('is-invalid');
+        $('#storage-add-name-error').text('');
+        $('#storage-add-detail-error').text('');
+      });
+
     });
   </script>
 @endsection

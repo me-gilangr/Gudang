@@ -24,6 +24,10 @@ Route::group(['middleware' => ['auth']], function () {
             Route::resource('Category', 'Backend\CategoryController');
             Route::resource('Storage', 'Backend\StorageController');
             Route::resource('Stuff', 'Backend\StuffController');    
+            Route::get('StockCard/{id}', 'Backend\StockCardController@index')->name('StockCard.index');
+            Route::get('/Image/Stuff/{id}', 'Backend\ImageStuffController@image')->name('ImageStuff.image');
+            Route::post('/Image/Stuff/{id}', 'Backend\ImageStuffController@store')->name('ImageStuff.store');
+            Route::delete('/Image/Stuff/{id}', 'Backend\ImageStuffController@delete')->name('ImageStuff.delete');
         });
 
         Route::group(['prefix' => 'Restore'], function () {

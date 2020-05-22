@@ -5,8 +5,8 @@
   <div class="card card-info card-outline">
     <div class="card-body box-profile">
       <div class="text-center"> 
-        <a href="{{ asset('images/users') }}/{{ $user->photo }}" data-lightbox="user-photo" data-title="Foto : {{ $user->name }}">
-          <img src="{{ asset('images/users') }}/{{ $user->photo }}" class="profile-user-img img-fluid img-circle" alt="{{ $user->name }}" style="max-height: 150px;">
+        <a href="{{ $user->photo != null ? asset('images/users').'/'. $user->photo:asset('images/no-image.png') }}" data-lightbox="user-photo" data-title="Foto : {{ $user->name }}">
+          <img src="{{ $user->photo != null ? asset('images/users').'/'. $user->photo:asset('images/no-image.png') }}" class="profile-user-img img-fluid img-circle" alt="{{ $user->name }}" style="max-height: 150px;">
         </a>
       </div>
 
