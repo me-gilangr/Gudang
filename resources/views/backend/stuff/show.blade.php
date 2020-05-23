@@ -54,26 +54,23 @@
   
   <div class="card card-info card-outline card-outline-tabs">
     <div class="card-header p-0 border-bottom-0"> 
-          <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
-            <li class="nav-item text-black">
-              <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill" href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true"> <i class="fa fa-image"></i> &ensp; Data Foto Barang</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill" href="#custom-tabs-four-profile" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false"> <i class="fa fa-upload"></i> &ensp; Upload Foto Barang</a>
-            </li> 
-            <li class="nav-item">
-            </li>
-            <li class="ml-auto">
-              <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                  <i class="fas fa-minus"></i>
-                </button>  
-              </div>
-            </li>
-          </ul> 
-          <div class="card-tools"> 
+      <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
+        <li class="nav-item text-black">
+          <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill" href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true"> <i class="fa fa-image"></i> &ensp; Data Foto Barang</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill" href="#custom-tabs-four-profile" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false"> <i class="fa fa-upload"></i> &ensp; Upload Foto Barang</a>
+        </li> 
+        <li class="nav-item">
+        </li>
+        <li class="ml-auto">
+          <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+              <i class="fas fa-minus"></i>
+            </button>  
           </div>
-      
+        </li>
+      </ul> 
     </div>
     <div class="card-body box-profile pt-1"> 
       <div class="tab-content" id="custom-tabs-four-tabContent">
@@ -117,10 +114,11 @@
   </div>
 </div>
 <div class="col-md-3 col-lg-3">
-  <div class="card card-info card-outline">
+  <div class="card card-success card-outline">
     <div class="card-body box-profile"> 
       <h3 class="profile-username text-center">Kartu Stok</h3>
 
+      @if ($stock != null)
       <p class="text-muted text-center"> Periode : {{ date('M Y', strtotime($stock->stock_date)) }}</p>
 
       <ul class="list-group list-group-unbordered mb-3">
@@ -136,21 +134,25 @@
           <span class="pl-1">Stok Keluar &ensp; :</span>
           <span class="float-right pr-1">{{ $stock->stock_out }} Unit</span>
         </li>
-        <li class="list-group-item">
+        {{-- <li class="list-group-item">
           <span class="pl-1">Stok Return-In &ensp; :</span>
           <span class="float-right pr-1">{{ $stock->stock_back_in }} Unit</span>
         </li>
         <li class="list-group-item">
           <span class="pl-1">Stok Return-Out &ensp; :</span>
           <span class="float-right pr-1">{{ $stock->stock_back_out }} Unit</span>
-        </li>
+        </li> --}}
         <li class="list-group-item">
           <span class="pl-1">Stok Penyesuaian &ensp; :</span>
           <span class="float-right pr-1">{{ $stock->stock_adjustment }} Unit</span>
         </li>
       </ul>
 
-      <a href="#" class="btn btn-outline-info btn-block"><i class="fa fa-edit"></i> &ensp; Detail Kartu Stock</a>
+      <a href="#" class="btn btn-outline-success btn-block"><i class="fa fa-edit"></i> &ensp; Detail Kartu Stock</a>
+      @else
+        <p class="text-muted text-center"> Belum Ada Kartu Stok Untuk Periode Bulan Ini</p>
+        <a href="#" class="btn btn-outline-success btn-block"><i class="fa fa-plus"></i> &ensp; Atur Kartu Stock</a>
+      @endif
     </div> 
   </div>
 </div>

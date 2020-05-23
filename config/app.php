@@ -67,7 +67,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Jakarta',
 
     /*
     |--------------------------------------------------------------------------
@@ -178,6 +178,7 @@ return [
         // Other
         Spatie\Permission\PermissionServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
+        Darryldecode\Cart\CartServiceProvider::class,
     ],
 
     /*
@@ -229,6 +230,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Datatables' => Yajra\DataTables\Facades\DataTables::class,
+        'Cart' => Darryldecode\Cart\Facades\CartFacade::class,
     ],
 
 ];

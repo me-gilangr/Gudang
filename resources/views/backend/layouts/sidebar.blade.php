@@ -58,6 +58,52 @@
             </li> 
           </ul>
         </li>
+        <li class="nav-item has-treeview {{ Request::is('Administrator/Entry*') ? 'menu-open':'' }}">
+          <a href="#" class="nav-link {{ Request::is('Administrator/Entry*') ? 'active':'' }}">
+            <i class="nav-icon fa fa-shopping-cart"></i>
+            <p>
+              Transaksi
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="{{ route('Entry.index') }} " class="nav-link">
+                <i class="fa fa-caret-right nav-icon"></i>
+                <p>Barang Masuk</p>
+              </a>
+            </li> 
+            <li class="nav-item">
+              <a href="{{ route('Out.index') }} " class="nav-link">
+                <i class="fa fa-caret-right nav-icon"></i>
+                <p>Barang Keluar</p>
+              </a>
+            </li> 
+            <li class="nav-item">
+              <a href="{{ route('Adjustment.index') }} " class="nav-link">
+                <i class="fa fa-caret-right nav-icon"></i>
+                <p>Adjustment Transaksi</p>
+              </a>
+            </li> 
+          </ul>
+        </li>
+        <li class="nav-item has-treeview {{ Request::is('Administrator/Category*') || Request::is('Administrator/Storage*') || Request::is('Administrator/Stuff*') ? 'menu-open':'' }}">
+          <a href="#" class="nav-link {{ Request::is('Administrator/Category*') || Request::is('Administrator/Storage*') || Request::is('Administrator/Stuff*') ? 'active':'' }}">
+            <i class="nav-icon fas fa-th"></i>
+            <p>
+              Data Transaksi
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="{{ route('Entry.data') }} " class="nav-link">
+                <i class="fa fa-caret-right nav-icon"></i>
+                <p>Data Barang Masuk</p>
+              </a>
+            </li>  
+          </ul>
+        </li>
         <li class="nav-item">
           <a href="#" class="nav-link">
             <i class="nav-icon fas fa-th"></i>

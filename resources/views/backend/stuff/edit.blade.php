@@ -29,9 +29,9 @@
 
 @section('content')
 <div class="col-12">
-  <div class="card card-success card-outline">
+  <div class="card card-warning card-outline">
     <div class="card-header">
-      <h5 class="card-title m-0"><i class="fa fa-edit"></i> &ensp; Form Data Barang</h5>
+      <h5 class="card-title m-0"><i class="fa fa-edit"></i> &ensp; Form Edit Data Barang</h5>
       <div class="card-tools">
         <button class="btn btn-tool" data-card-widget="collapse">
           <i class="fa fa-minus"></i>
@@ -42,12 +42,13 @@
       </div>
     </div>
     <div class="card-body">
-      <form action="{{ route('Stuff.store') }}" method="post">
+      <form action="{{ route('Stuff.update', $stuff->id) }}" method="post">
         @csrf
+        @method('PUT')
         <div class="row">
           <div class="form-group col-md-6 col-lg-6">
             <label for="">Nama Barang : <span class="text-danger">*</span></label>
-            <input type="text" name="name" id="name" class="form-control {{ $errors->has('name') ? 'is-invalid':'' }}" placeholder="Masukan Nama Barang..." value="{{ old('name') }}" required autofocus>
+            <input type="text" name="name" id="name" class="form-control {{ $errors->has('name') ? 'is-invalid':'' }}" placeholder="Masukan Nama Barang..." value="{{ $stuff->name }}" required autofocus>
             <span class="text-danger">
               {{ $errors->first('name') }}
             </span>
@@ -57,7 +58,7 @@
             <select name="category_id" id="category_id" class="form-control select2" style="width: 100%;" data-placeholder="Pilih Kategori Barang" required>
               <option value=""></option>
               @foreach ($category as $item)
-                <option value="{{ $item->id }}" {{ $item->id == old('category_id') ? 'selected':'' }}>{{ $item->name }}</option>
+                <option value="{{ $item->id }}" {{ $item->id == $stuff->category_id ? 'selected':'' }}>{{ $item->name }}</option>
               @endforeach
               <span class="text-danger">
                 {{ $errors->first('category_id') }}
@@ -69,7 +70,7 @@
             <select name="storage_id" id="storage_id" class="form-control select2" style="width: 100%;" data-placeholder="Pilih Lokasi Gudang" required>
               <option value=""></option>
               @foreach ($storage as $item)
-                <option value="{{ $item->id }}" {{ $item->id == old('storage_id') ? 'selected':'' }}>{{ $item->name }}</option>
+                <option value="{{ $item->id }}" {{ $item->id == $stuff->storage_id ? 'selected':'' }}>{{ $item->name }}</option>
               @endforeach
             </select>
             <span class="text-danger">
@@ -78,35 +79,21 @@
           </div>
           <div class="form-group col-12">
             <label for="">Deskripsi Barang : <span class="text-danger">*</span></label>
-            <textarea name="description" id="description" class="form-control {{ $errors->has('description') ? 'is-invalid':'' }}" placeholder="Masukan Deskripsi Barang..." required>{{ old('description') }}</textarea>
-          </div> 
-          <div class="form-group col-md-6 col-lg-6">
-            <div class="input-group mb-3">
-              <div class="input-group-prepend">
-                <span class="input-group-text">Stok Modal &ensp; : </span>
-              </div>
-              <input type="number" name="cap_stock" id="cap_stock" class="form-control {{ $errors->has('cap_stock') ? 'is-invalid':'' }}" placeholder="0" min="1" value="{{ old('cap_stock') }}">
-              <div class="input-group-append">
-                <span class="input-group-text">* Dapat di-Kosongkan</span>
-              </div>
-            </div>
-            <span class="text-danger">
-              {{ $errors->first('cap_stock') }}
-            </span>
-          </div>
+            <textarea name="description" id="description" class="form-control {{ $errors->has('description') ? 'is-invalid':'' }}" placeholder="Masukan Deskripsi Barang..." required>{{ $stuff->description }}</textarea>
+          </div>  
           <div class="form-group col-12">
             <hr class="mt-0 mb-2">
             <div class="row">
               <div class="col-md-2 col-lg-2">
-                <button type="submit" class="btn btn-outline-success btn-block mt-1">
+                <button type="submit" class="btn btn-outline-info btn-block mt-1">
                   <i class="fa fa-plus"></i> &ensp;
-                  Tambah Data
+                  Edit Data
                 </button>
               </div>
               <div class="col-md-2 col-lg-2">
                 <button type="submit" class="btn btn-outline-danger btn-block mt-1">
                   <i class="fa fa-undo"></i> &ensp;
-                  Reset Input
+                  Reset Ulang
                 </button>
               </div>
             </div>
@@ -160,16 +147,16 @@
           </button>
         </div>
         <div class="modal-body">
-          <div class="form-group">
-            <label for="">Nama Gudang : <span class="text-danger">*</span></label>
-            <input type="text" name="name" id="storage-add-name" class="form-control" placeholder="Masukan Nama Gudang..." required>
-            <span class="text-danger" id="storage-add-name-error"></span>
-          </div>
-          <div class="form-group">
-            <label for="">Detail Gudang :</label>
-            <textarea name="detail" id="storage-add-detail" class="form-control" placeholder="Masukan Detail Gudang..."></textarea>
-            <span class="text-danger" id="storage-add-detail-error"></span>
-          </div> 
+            <div class="form-group">
+              <label for="">Nama Gudang : <span class="text-danger">*</span></label>
+              <input type="text" name="name" id="storage-add-name" class="form-control" placeholder="Masukan Nama Gudang..." required>
+              <span class="text-danger" id="storage-add-name-error"></span>
+            </div>
+            <div class="form-group">
+              <label for="">Detail Gudang :</label>
+              <textarea name="detail" id="storage-add-detail" class="form-control" placeholder="Masukan Detail Gudang..."></textarea>
+              <span class="text-danger" id="storage-add-detail-error"></span>
+            </div> 
         </div>
         <div class="modal-footer justify-content-between">
           <button type="reset" class="btn btn-default" data-dismiss="modal">Batalkan</button>

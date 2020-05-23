@@ -103,7 +103,7 @@ class StuffController extends Controller
             $stuff = Stuff::findOrFail($id);
             $stock = StockCard::where('id', '=', $id)->whereMonth('stock_date', '=', $m)->whereYear('stock_date', '=', $y)->first();
 
-            return view('backend.stuff.show', compact('stuff', 'user', 'stock'));
+            return view('backend.stuff.show', compact('stuff', 'stock'));
         } catch (\Exception $e) {
             session()->flash('error', 'Terjadi Kesalahan !');
             return redirect()->back();
@@ -118,7 +118,16 @@ class StuffController extends Controller
      */
     public function edit($id)
     {
-        //
+        try {
+            $stuff = Stuff::findOrFail($id);
+            $category = Category::orderBy('name', 'ASC')->get();
+            $storage = Storage::orderBy('name', 'ASC')->get();
+
+            return view('backend.stuff.edit', compact('stuff', 'category', 'storage'));
+        } catch (\Exception $e) {
+            session()->flash('error', 'Terjadi Kesalahan !');
+            return redirect()->back();
+        }
     }
 
     /**
@@ -130,7 +139,28 @@ class StuffController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required|string',
+            'category_id' => 'required|numeric|exists:categories,id',
+            'storage_id' => 'required|numeric|exists:storages,id',
+            'description' => 'required|string'
+        ]);
+
+        try {
+            $stuff = Stuff::findOrFail($id);
+            $stuff->update([
+                'name' => $request->name,
+                'category_id' => $request->category_id,
+                'storage_id' => $request->storage_id,
+                'description' => $request->description
+            ]);
+
+            session()->flash('success', 'Data Berhasil di-Ubah !');
+            return redirect(route('Stuff.index'));
+        } catch (\Exception $e) {
+            session()->flash('error', 'Terjadi Kesalahan !');
+            return redirect()->back();
+        }
     }
 
     /**
@@ -141,6 +171,52 @@ class StuffController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $stuff = Stuff::findOrFail($id);
+            $stuff->delete();
+
+            return redirect(route('Stuff.index'));
+        } catch (\Exception $e) {
+            session()->flash('error', 'Terjadi Kesalahan !');
+            return redirect()->back();
+        }
+    }
+
+    public function restore(Request $request)
+    {
+        $this->validate($request, [
+            'restore_id' => 'required|numeric',
+        ]);
+
+        try {
+            $stuff = Stuff::onlyTrashed()->where('id', '=', $request->restore_id)->firstOrFail();
+            $stuff->restore();
+            return response()->json([
+                'message' => 'Data Berhasil di-Pulihkan !',
+                'status' => 200,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json($e, 400);
+        }
+    }
+
+    public function permanent(Request $request)
+    {
+        $this->validate($request, [
+            'permanent_id' => 'required|numeric',
+        ]);
+        try {
+            $stuff = Stuff::onlyTrashed()->where('id', '=', $request->permanent_id)->firstOrFail();
+            $stuff->stock()->forceDelete();
+            $stuff->image()->forceDelete();
+            $stuff->forceDelete();
+
+            return response()->json([
+                'message' => 'Data di-Hapus Permanen !',
+                'status' => 200,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json($e, 400);
+        }
     }
 }

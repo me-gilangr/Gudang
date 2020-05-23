@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateStockCardsTable extends Migration
+class CreateAdjustmentDetailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,14 @@ class CreateStockCardsTable extends Migration
      */
     public function up()
     {
-        Schema::create('stock_cards', function (Blueprint $table) {
+        Schema::create('adjustment_details', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('adjustment_id');
+            $table->foreign('adjustment_id')->references('id')->on('adjustment_headers');
             $table->unsignedBigInteger('stuff_id');
             $table->foreign('stuff_id')->references('id')->on('stuffs');
-            $table->date('stock_date');
-            $table->double('cap_stock')->default(0);
-            $table->double('stock_entry')->default(0);
-            $table->double('stock_out')->default(0);
-            // $table->double('stock_back_in')->default(0);
-            // $table->double('stock_back_out')->default(0);
-            $table->double('stock_adjustment')->default(0);
+            $table->double('stock_adjustment');
+            $table->string('description');
             $table->timestamps();
         });
     }
@@ -35,6 +32,6 @@ class CreateStockCardsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('stock_cards');
+        Schema::dropIfExists('adjustment_details');
     }
 }
